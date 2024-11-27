@@ -12,7 +12,7 @@ if "conversation_history" not in st.session_state:
 st.title("AI Chat Companion")
 
 # Set up the Hugging Face API client
-api_key = "your_huggingface_api_key"  # Replace with your actual API key
+api_key = "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"  # Replace with your actual API key
 client = InferenceClient(token=api_key)
 
 # Define the model and parameters
