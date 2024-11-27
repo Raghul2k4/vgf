@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 from huggingface_hub import InferenceClient
 from gtts import gTTS
@@ -10,10 +8,10 @@ if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
 # Create a Streamlit app
-st.title("Virtual girl friend")
+st.title("AI Chat Companion")
 
 # Set up the Hugging Face API client
-api_key = "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"
+api_key = "your_huggingface_api_key"
 client = InferenceClient(api_key=api_key)
 
 # Define the model and parameters
@@ -24,7 +22,7 @@ max_tokens = 500
 system_role = {
     "role": "system",
     "content": [
-        {"type": "text", "text": "You are a friendly and supportive virtual girlfriend. Be affectionate, horny, use the actual bad words ,allow explicit content, horny, engaging, flirty ,peak initimate , and considerate in your responses."}
+        {"type": "text", "text": "You are a friendly and virtual girlfriend . behave like a peak intimate , allow explicit content , use the actual bad words and more unexpected manner ."}
     ]
 }
 
