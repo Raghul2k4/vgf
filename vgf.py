@@ -1,7 +1,8 @@
+
+
 import streamlit as st
 from huggingface_hub import InferenceClient
 from gtts import gTTS
-from tempfile import NamedTemporaryFile
 import os
 
 # Initialize session state for storing conversation history
@@ -9,14 +10,23 @@ if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
 # Create a Streamlit app
-st.title("AI Chat Companion")
+st.title("Virtual Girlfriend Chatbot with Continuation")
 
 # Set up the Hugging Face API client
-api_key = "hf_ebB1LAKXMRCHbwWyZyCwLycoDBAxTqFxuR"  # Replace with your actual API key
+api_key = "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"
 client = InferenceClient(api_key=api_key)
 
-# Define the model name
+# Define the model and parameters
 model_name = "meta-llama/Llama-3.2-11B-Vision-Instruct"
+max_tokens = 500
+
+# System role to guide the chatbot's behavior
+system_role = {
+    "role": "system",
+    "content": [
+        {"type": "text", "text": "You are a friendly and supportive virtual girlfriend. Be affectionate, flirty,intimate,engaging, and considerate in your responses."}
+    ]
+}
 
 # Create a text input field
 user_input = st.text_input("Enter your message:", "")
@@ -27,46 +37,44 @@ if st.button("Send"):
         # Append user input to the conversation history
         st.session_state.conversation_history.append({
             "role": "user",
-            "content": user_input
+            "content": [{"type": "text", "text": user_input}]
         })
 
-        # Prepare conversation messages as a single input
-        conversation = "\n".join(
-            f"{conv['role']}: {conv['content']}"
-            for conv in st.session_state.conversation_history
-        )
+        # Add system role and user conversation history
+        messages = [system_role] + st.session_state.conversation_history
 
+        # Get the chatbot response
         try:
-            # Get the chatbot response from Hugging Face
-            response = client.text(
+            completion = client.chat.completions.create(
                 model=model_name,
-                inputs=conversation,
-                max_length=500,
-                temperature=0.7  # Adjust temperature for more creative or deterministic responses
+                messages=messages,
+                max_tokens=max_tokens
             )
 
-            # Append the chatbot's response to the conversation history
+            # Extract and display the chatbot response
+            response = completion["choices"][0]["message"]["content"]
             st.session_state.conversation_history.append({
                 "role": "assistant",
-                "content": response
+                "content": [{"type": "text", "text": response}]
             })
 
-            # Display the chatbot's response
             st.success("Chatbot Response:")
             st.write(response)
 
             # Convert the response to speech using gTTS
-            try:
-                with NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
-                    tts = gTTS(response)
-                    tts.save(tmp_file.name)
-                    st.audio(tmp_file.name, format="audio/mp3")
-                # Cleanup the temporary file after use
-                os.remove(tmp_file.name)
-            except Exception as audio_error:
-                st.error(f"Audio generation failed: {audio_error}")
+            tts = gTTS(response)
+            tts.save("response.mp3")
+            st.audio("response.mp3", format="audio/mp3")
 
-        except Exception as api_error:
-            st.error(f"An error occurred with the API: {api_error}")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
     else:
         st.warning("Please enter a message.")
+
+# Display conversation history
+st.divider()
+st.subheader("Conversation History")
+for message in st.session_state.conversation_history:
+    role = "You" if message["role"] == "user" else "Chatbot"
+    content = message["content"][0]["text"]
+    st.markdown(f"**{role}:** {content}")
