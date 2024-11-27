@@ -13,7 +13,7 @@ if "conversation_history" not in st.session_state:
 st.title("Virtual Girlfriend Chatbot with Continuation")
 
 # Set up the Hugging Face API client
-api_key = "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"
+api_key = "hf_ebBlLAKXMRCHbwWyZyCwLcoDBAxTqFxuR"
 client = InferenceClient(api_key=api_key)
 
 # Define the model and parameters
