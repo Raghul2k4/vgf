@@ -68,11 +68,3 @@ if st.button("Send"):
             st.error(f"An error occurred: {e}")
     else:
         st.warning("Please enter a message.")
-
-# Display conversation history
-st.divider()
-st.subheader("Conversation History")
-for message in st.session_state.conversation_history:
-    role = "You" if message["role"] == "user" else "Chatbot"
-    content = message["content"][0]["text"]
-    st.markdown(f"**{role}:** {content}")
