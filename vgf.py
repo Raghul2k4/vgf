@@ -10,7 +10,7 @@ if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
 # Create a Streamlit app
-st.title("Virtual Girlfriend Chatbot with Continuation")
+st.title("Virtual girl friend")
 
 # Set up the Hugging Face API client
 api_key = "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"
@@ -24,7 +24,7 @@ max_tokens = 500
 system_role = {
     "role": "system",
     "content": [
-        {"type": "text", "text": "You are a friendly and supportive virtual girlfriend. Be affectionate, engaging, and considerate in your responses."}
+        {"type": "text", "text": "You are a friendly and supportive virtual girlfriend. Be affectionate, engaging, flirty , initimate , and considerate in your responses."}
     ]
 }
 
