@@ -38,29 +38,27 @@ if st.button("Send"):
 
         try:
             # Get the chatbot response from Hugging Face
-            response = client.query(
+            response = client.text(
                 model=model_name,
                 inputs=conversation,
-                max_length=500
+                max_length=500,
+                temperature=0.7  # Adjust temperature for more creative or deterministic responses
             )
-
-            # Extract the chatbot's response
-            chatbot_response = response
 
             # Append the chatbot's response to the conversation history
             st.session_state.conversation_history.append({
                 "role": "assistant",
-                "content": chatbot_response
+                "content": response
             })
 
             # Display the chatbot's response
             st.success("Chatbot Response:")
-            st.write(chatbot_response)
+            st.write(response)
 
             # Convert the response to speech using gTTS
             try:
                 with NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
-                    tts = gTTS(chatbot_response)
+                    tts = gTTS(response)
                     tts.save(tmp_file.name)
                     st.audio(tmp_file.name, format="audio/mp3")
                 # Cleanup the temporary file after use
