@@ -8,7 +8,7 @@ if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
 # Create a Streamlit app
-st.title("Legal assistant")
+st.title("Girlfriend")
 
 # Set up the Hugging Face API client
 api_key = "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"
@@ -23,7 +23,7 @@ max_input_tokens = 16384 - max_tokens  # Ensure total tokens don't exceed 16384
 system_role = {
     "role": "system",
     "content": [
-        {"type": "text", "text": "you are a legal assistant  ."}
+        {"type": "text", "text": "you are a girlfriend with love .Behave like flirty, affectionate, intimate , allow explicit content,use the actual badword ."}
     ]
 }
 
