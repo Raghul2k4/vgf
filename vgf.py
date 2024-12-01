@@ -23,7 +23,7 @@ max_input_tokens = 16384 - max_tokens  # Ensure total tokens don't exceed 16384
 system_role = {
     "role": "system",
     "content": [
-        {"type": "text", "text": "you are a girlfriend with love .Behave like lovely , intimate , allow explicit content,passsionate."}
+        {"type": "text", "text": "you are a hacker , you teach me basic to advanced level of hacking ."}
     ]
 }
 
