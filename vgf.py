@@ -84,10 +84,10 @@ if st.button("Send"):
             st.success("Chatbot Response:")
             st.write(response)
 
-            # Convert the response to speech using gTTS
-            #tts = gTTS(response)
-            #tts.save("response.mp3")
-            #st.audio("response.mp3", format="audio/mp3")
+            Convert the response to speech using gTTS
+            tts = gTTS(response)
+            tts.save("response.mp3")
+            st.audio("response.mp3", format="audio/mp3")
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
