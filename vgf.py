@@ -6,7 +6,7 @@ from gtts import gTTS
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
-# App title
+# Title
 st.title("Virtual Girlfriend: Aroura")
 
 # Hugging Face API client
@@ -16,50 +16,49 @@ client = InferenceClient(api_token=api_key)
 # Model details
 model_name = "meta-llama/Llama-3.2-11B-Vision-Instruct"
 max_tokens = 500
-max_input_tokens = 4096 - max_tokens  # Adjust based on token limit
+max_input_tokens = 4096 - max_tokens  # Adjust for token limit
 
-# Define system role
+# System role
 system_role = {
     "role": "system",
-    "content": [{"type": "text", "text": "You are a virtual girlfriend named Aroura. You are loving, affectionate, and engaging."}]
+    "content": [{"type": "text", "text": "You are a virtual girlfriend named Aroura."}]
 }
 
-# Input field
+# User input
 user_input = st.text_input("Enter your message:", "")
 
-# Clear history button
+# Reset button
 if st.button("Reset Conversation"):
     st.session_state.conversation_history = []
     st.success("Conversation history cleared.")
 
-# Process user input
+# Send button
 if st.button("Send"):
     if user_input.strip():
-        # Add user input to conversation history
-        st.session_state.conversation_history.append({
-            "role": "user",
-            "content": [{"type": "text", "text": user_input}]
-        })
-
-        # Combine system role and conversation history
-        messages = [system_role] + st.session_state.conversation_history
-
-        # Ensure history stays within token limits
-        total_tokens = sum(len(msg["content"][0]["text"].split()) for msg in messages)
-        if total_tokens > max_input_tokens:
-            st.warning("Conversation too long, truncating earlier messages.")
-            while total_tokens > max_input_tokens and st.session_state.conversation_history:
-                removed_msg = st.session_state.conversation_history.pop(0)
-                total_tokens -= len(removed_msg["content"][0]["text"].split())
-
         try:
-            # Generate response
-            completion = client.text_generation(
+            # Add user input to history
+            st.session_state.conversation_history.append({
+                "role": "user",
+                "content": [{"type": "text", "text": user_input}]
+            })
+
+            # Build message payload
+            messages = [system_role] + st.session_state.conversation_history
+
+            # Token count validation
+            total_tokens = sum(len(msg["content"][0]["text"].split()) for msg in messages)
+            if total_tokens > max_input_tokens:
+                st.warning("Truncating long conversation history.")
+                while total_tokens > max_input_tokens and st.session_state.conversation_history:
+                    removed_msg = st.session_state.conversation_history.pop(0)
+                    total_tokens -= len(removed_msg["content"][0]["text"].split())
+
+            # API call
+            response = client.text_generation(
                 model=model_name,
                 inputs={"messages": messages},
                 parameters={"max_new_tokens": max_tokens}
-            )
-            response = completion["generated_text"]
+            )["generated_text"]
 
             # Add response to history
             st.session_state.conversation_history.append({
@@ -71,7 +70,7 @@ if st.button("Send"):
             st.success("Chatbot Response:")
             st.write(response)
 
-            # Convert response to audio
+            # Convert to audio
             tts = gTTS(response)
             tts.save("response.mp3")
             st.audio("response.mp3", format="audio/mp3")
@@ -81,10 +80,9 @@ if st.button("Send"):
     else:
         st.warning("Please enter a message.")
 
-# Display conversation history temporarily
+# Display history
 st.divider()
 st.subheader("Conversation History")
 for message in st.session_state.conversation_history:
     role = "You" if message["role"] == "user" else "Chatbot"
-    content = message["content"][0]["text"]
-    st.markdown(f"**{role}:** {content}")
+    st.markdown(f"**{role}:** {message['content'][0]['text']}")
