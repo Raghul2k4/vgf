@@ -15,7 +15,7 @@ api_key = "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"
 client = InferenceClient(api_key=api_key)
 
 # Define the model and parameters
-model_name = "meta-llama/Llama-3.2-11B-Vision-Instruct"
+model_name = "meta-llama/Llama-3.3-70B-Instruct"
 max_tokens = 500
 max_input_tokens = 16384 - max_tokens  # Ensure total tokens don't exceed 16384
 
