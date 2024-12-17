@@ -18,7 +18,7 @@ client = InferenceClient(api_key=api_key)
 
 # Define the model and parameters
 model_name = "meta-llama/Llama-3.2-11B-Vision-Instruct"
-max_tokens = 500
+max_tokens = 200
 
 # System role to guide the chatbot's behavior
 system_role = {
