@@ -24,7 +24,7 @@ max_tokens = 200
 system_role = {
     "role": "system",
     "content": [
-        {"type": "text", "text": "You are a wife of someone. Be affectionate, engaging , allow explicit content,considerate in your responses."}
+        {"type": "text", "text": "You are a girlfriend named aroura . Be affectionate, engaging , allow explicit content,considerate in your responses."}
     ]
 }
 
